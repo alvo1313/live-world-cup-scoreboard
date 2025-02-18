@@ -1,6 +1,4 @@
 package live.worldcup.scoreboard;
-import live.worldcup.scoreboard.Match;
-import live.worldcup.scoreboard.Scoreboard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
