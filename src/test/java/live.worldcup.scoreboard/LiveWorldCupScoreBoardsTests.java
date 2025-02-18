@@ -26,6 +26,21 @@ public class LiveWorldCupScoreBoardTests {
         assertEquals(1, scoreboard.getMatchesCount());
     }
 
+    @Test
+    void shouldThrowExceptionWhenStartingInvalidMatch() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> scoreboard.startMatch("Home", "Home"),
+                "Home and away teams cannot be the same");
+    }
+
+    @Test
+    void shouldThrowExceptionWhenStartingDuplicateMatch() {
+        scoreboard.startMatch("Home", "Away");
+
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> scoreboard.startMatch("Home", "Away"),
+                "Match between these teams is already in progress");
+    }
 
     @Test
     void shouldUpdateMatchScore() {
@@ -38,6 +53,22 @@ public class LiveWorldCupScoreBoardTests {
     }
 
     @Test
+    void shouldThrowExceptionWhenUpdatingWithNegativeScore() {
+        scoreboard.startMatch("Home", "Away");
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> scoreboard.updateScore("Home", "Away", -1, 0),
+                "Scores cannot be negative");
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentMatch() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> scoreboard.updateScore("Home", "Away", 1, 1),
+                "Match not found");
+    }
+
+    @Test
     void shouldFinishExistingMatch() {
         scoreboard.startMatch("Home", "Away");
         scoreboard.finishMatch("Home", "Away");
@@ -45,6 +76,12 @@ public class LiveWorldCupScoreBoardTests {
         assertEquals(0, scoreboard.getMatchesCount());
     }
 
+    @Test
+    void shouldThrowExceptionWhenFinishingNonExistentMatch() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> scoreboard.finishMatch("Home", "Away"),
+                "Match not found");
+    }
 
     @Test
     void shouldReturnMatchesSummaryOrderedByTotalScoreAndStartTime() {
