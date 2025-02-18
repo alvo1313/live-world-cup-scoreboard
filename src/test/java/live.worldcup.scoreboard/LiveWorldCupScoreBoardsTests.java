@@ -48,6 +48,7 @@ public class LiveWorldCupScoreBoardTests {
 
     @Test
     void shouldReturnMatchesSummaryOrderedByTotalScoreAndStartTime() {
+        setupWorldCupScenario();
 
         var summary = scoreboard.getMatchesSummary();
 
@@ -59,4 +60,29 @@ public class LiveWorldCupScoreBoardTests {
         assertEquals("Germany 2 - France 2", summary.get(4).toString());
     }
 
+    @Test
+    void shouldOrderEqualScoreMatchesByMostRecent() {
+        scoreboard.startMatch("Team1", "Team2");
+        scoreboard.startMatch("Team3", "Team4");
+
+        scoreboard.updateScore("Team1", "Team2", 2, 2); // Total 4
+        scoreboard.updateScore("Team3", "Team4", 3, 1); // Total 4
+
+        var summary = scoreboard.getMatchesSummary();
+        assertEquals("Team3 3 - Team4 1", summary.get(0).toString());
+    }
+
+    private void setupWorldCupScenario() {
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.startMatch("Spain", "Brazil");
+        scoreboard.startMatch("Germany", "France");
+        scoreboard.startMatch("Uruguay", "Italy");
+        scoreboard.startMatch("Argentina", "Australia");
+
+        scoreboard.updateScore("Mexico", "Canada", 0, 5);
+        scoreboard.updateScore("Spain", "Brazil", 10, 2);
+        scoreboard.updateScore("Germany", "France", 2, 2);
+        scoreboard.updateScore("Uruguay", "Italy", 6, 6);
+        scoreboard.updateScore("Argentina", "Australia", 3, 1);
+    }
 }
