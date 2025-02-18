@@ -13,6 +13,12 @@ public class Match {
     private final LocalDateTime startTime;
 
     public Match(String homeTeam, String awayTeam) {
+        if (homeTeam == null || homeTeam.trim().isEmpty()) {
+            throw new IllegalArgumentException("Home team name cannot be null or empty");
+        }
+        if (awayTeam == null || awayTeam.trim().isEmpty()) {
+            throw new IllegalArgumentException("Away team name cannot be null or empty");
+        }
         if (homeTeam.equals(awayTeam)) {
             throw new IllegalArgumentException("Home and away teams cannot be the same");
         }
