@@ -1,87 +1,51 @@
 package live.worldcup.scoreboard;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
 
-public class Match {
-    private final String id;
-    private final String homeTeam;
-    private final String awayTeam;
-    private int homeScore;
-    private int awayScore;
-    private final LocalDateTime startTime;
+/**
+ * Defines the contract for a football match.
+ * Interface segregation principle: clients depend only on methods they use.
+ */
+public interface Match {
+    /**
+     * Gets the unique identifier for this match.
+     *
+     * @return the match identifier
+     */
+    String getId();
 
-    public Match(String homeTeam, String awayTeam) {
-        if (homeTeam == null || homeTeam.trim().isEmpty()) {
-            throw new IllegalArgumentException("Home team name cannot be null or empty");
-        }
-        if (awayTeam == null || awayTeam.trim().isEmpty()) {
-            throw new IllegalArgumentException("Away team name cannot be null or empty");
-        }
-        if (homeTeam.equals(awayTeam)) {
-            throw new IllegalArgumentException("Home and away teams cannot be the same");
-        }
+    /**
+     * Gets the home team.
+     *
+     * @return the home team
+     */
+    Team getHomeTeam();
 
-        this.id = UUID.randomUUID().toString();
-        this.homeTeam = homeTeam;
-        this.awayTeam = awayTeam;
-        this.homeScore = 0;
-        this.awayScore = 0;
-        this.startTime = LocalDateTime.now();
-    }
+    /**
+     * Gets the away team.
+     *
+     * @return the away team
+     */
+    Team getAwayTeam();
 
-    public void updateScore(int homeScore, int awayScore) {
-        if (homeScore < 0 || awayScore < 0) {
-            throw new IllegalArgumentException("Scores cannot be negative");
-        }
-        this.homeScore = homeScore;
-        this.awayScore = awayScore;
-    }
+    /**
+     * Gets the current score.
+     *
+     * @return the current score
+     */
+    Score getScore();
 
-    public String getId() {
-        return id;
-    }
+    /**
+     * Updates the score for the match.
+     *
+     * @param score the new score
+     */
+    void updateScore(Score score);
 
-    public String getHomeTeam() {
-        return homeTeam;
-    }
-
-    public String getAwayTeam() {
-        return awayTeam;
-    }
-
-    public int getHomeScore() {
-        return homeScore;
-    }
-
-    public int getAwayScore() {
-        return awayScore;
-    }
-
-    public int getTotalScore() {
-        return homeScore + awayScore;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Match match = (Match) o;
-        return Objects.equals(id, match.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s %d - %s %d", homeTeam, homeScore, awayTeam, awayScore);
-    }
+    /**
+     * Gets the time when the match started.
+     *
+     * @return the start time
+     */
+    LocalDateTime getStartTime();
 }
